@@ -7,6 +7,8 @@ int fontSize = 400;
 int fontAlpha = 1;
 int lastDraw;
 
+boolean WEB = true;
+
 void setup() {
   try {
     for (String s: loadStrings(fileName)) {
@@ -15,11 +17,18 @@ void setup() {
   }
   catch(java.lang.NullPointerException e) {
     println("ERROR: probably couldn't open file. Does "+dataPath(fileName)+" really exist??");
+    exit();
   }
 
   new File(dataPath(fileName)).delete();
 
-  size(1024, 1500);
+  if (WEB) { 
+    size(1600, 900);
+  }
+  else { 
+    size(1024, 1600);
+  }
+
   background(255);
   lastDraw = millis()-1000;
 }
@@ -33,10 +42,14 @@ void draw() {
     lastDraw = millis();
     fontAlpha *= 2;
   }
+
+  if (fontAlpha>=255) {
+    exit();
+  }
 }
 
 void drawLetter(int fontAlpha) {
-  int snap = width/4;
+  int snap = (WEB)?(width/6):(width/4);
   PVector runLoc = new PVector(0, 0.9*fontSize);
   PVector locVar = new PVector(0.05*fontSize, 0.1*fontSize);
 
